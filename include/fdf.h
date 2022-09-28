@@ -6,7 +6,7 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 00:29:49 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 00:53:27 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/09/28 02:36:28 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	free_all(t_fdf *fdf);
 void	free_line(t_fdf *fdf);
 
 // DRAW FUNCTIONS
-int		draw_line(t_fdf *fdf, int x1, int y1, int x2, int y2);
+void	draw_line(t_fdf *fdf, float x1, float y1, float x2, float y2);
 
 // TESTES
 void	print_line(int *mtx, int size);

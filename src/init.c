@@ -6,7 +6,7 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 03:22:21 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 00:49:01 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/09/28 02:41:11 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_window(t_fdf *fdf)
 		exit(1);
 	}
 
-	draw_line(fdf, 400, 200, 400, 400); //dps eu só vou chamar a draw aqui e a draw_line vai ta dentro dela
+	draw_line(fdf, 500, 100, 100, 150); //dps eu só vou chamar a draw aqui e a draw_line vai ta dentro dela
 
 	mlx_key_hook(fdf->win, key_hook, fdf);
 	mlx_loop(fdf->mlx);
