@@ -6,7 +6,7 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 00:29:49 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 02:36:28 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/10/05 04:58:02 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,43 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <mlx.h>
+# include <X11/keysym.h> 
+# include <X11/X.h> 
 # include <stdlib.h>
+# include <math.h>
 # include "../lib/include/libft.h"
 
 # define ESC_KEY 65307
+# define DEFAULT_COLOR 0xffffff
 
 // STRUCTS
-typedef struct s_pixel
+typedef struct s_camera
 {
-	int x;
-	int y;
-	int color;
+	int		zoom;
+	float	angle;
+	int		x_position;
+	int		y_position;
+	int		gap;
+	int		projection;
 
-}	t_pixel;
+}	t_camera;
+
+typedef struct s_spots
+{
+	float	x1;
+	float	y1;
+	int		z1;
+	float	x2;
+	float	y2;
+	int		z2;
+
+}	t_spots;
 
 typedef struct s_map
 {
 	int		**matrix;
-	char	*buffer;
-	char	**line;
-	int 	length;
+	int		**color_mtx;
+	int		length;
 	int		width;
 
 }	t_map;
@@ -47,29 +64,40 @@ typedef struct s_fdf
 	void	*mlx;
 	void	*win;
 	t_map	*map;
+	t_spots	*spots;
+	t_camera *camera;
 
 }	t_fdf;
 
-// VALIDATION FUNCTIONS
-void	valid_arg(int argc, char *argv);
-void	valid_map_line(t_fdf *fdf);
-
-// INIT FUNCTIONS
+//	INIT FUNCTIONS
+t_fdf	*init_allocs(void);
 void	init_window(t_fdf *fdf);
-void	init_sizes(t_fdf *fdf, char *file);
 void	init_matrix(t_fdf *fdf, char *file);
+//	UTILS
+void	pick_sizes(t_fdf *fdf, char *file);
+void	convert_mtx(t_fdf *fdf, char **line);
 
-// DEESTROY FUNCTIONS
-void	free_all(t_fdf *fdf);
-void	free_line(t_fdf *fdf);
+//	DRAW FUNCTIONS
+void	draw(t_fdf *fdf);
+//	UTILS
+int		bigger(int a, int b);
+float	positive(float i);
+void	isometric(float *x, float *y, int z, float angle);
 
-// DRAW FUNCTIONS
-void	draw_line(t_fdf *fdf, float x1, float y1, float x2, float y2);
+//	HOOK FUNCTIONS
+int		key_hook(int keycode, t_fdf *fdf);
+int		x_hook(t_fdf *fdf);
+int		expose_hook(t_fdf *fdf);
+// int	mouse_hook(int mousecode, t_fdf *fdf);
 
-// TESTES
-void	print_line(int *mtx, int size);
-void	print_mtx(int **mtx, int wid, int len);
+//	DESTROY FUNCTIONS
+void	destroy_window(t_fdf *fdf);
+void	destroy_all(t_fdf *fdf);
+void	destroy_line(char **line);
 
 #endif
 
-// mudar os valores dos erros dos exits
+// ver os hooks novamente.
+// mudar os valores dos erros dos exits.
+// corrigir erros do mapa, como os nulos no começo e talz, n sei se precisa.
+// ver se tenho que colocar a milibx dentro do projeto.

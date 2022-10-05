@@ -6,113 +6,91 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 03:22:21 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 02:41:11 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/10/05 05:00:23 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-static int	key_hook(int keycode, t_fdf *fdf)
+/* -------------- ALLOC FUNCTION ---------------- */
+
+t_fdf	*init_allocs(void)
 {
-	if (keycode == ESC_KEY)
-	{
-		mlx_destroy_window(fdf->mlx, fdf->win);
-		mlx_destroy_display(fdf->mlx);
-		free_all(fdf);
-		exit(0);
-	}
-	//else // para o bonus
-	return (0);
+	t_fdf	*fdf;
+
+	if (!(fdf = malloc(sizeof(t_fdf))) ||
+		!(fdf->map = malloc(sizeof(t_map))) ||
+		!(fdf->spots = malloc(sizeof(t_spots))) ||
+		!(fdf->camera = malloc(sizeof(t_camera))))
+		exit(1);
+	return (fdf);
 }
+
+/* -------------- MATRIX FUNCTIONS ---------------- */
+
+void	init_matrix(t_fdf *fdf, char *file)
+{
+	int		fd;
+	char	*buffer;
+	char	**line;
+
+	if (!(fd = open(file, 'r')))
+		exit(0);
+		
+	pick_sizes(fdf, file);
+
+	if (!(fdf->map->matrix = malloc(sizeof(int *) * fdf->map->width)) ||
+		!(fdf->map->color_mtx = malloc(sizeof(int *) * fdf->map->width)))
+		exit(1);
+
+	buffer = get_next_line(fd);
+	while (buffer)
+	{
+		line = ft_split(buffer, ' ');
+		convert_mtx(fdf, line);
+		destroy_line(line);
+		free(buffer);
+		buffer = get_next_line(fd);
+	}
+	close (fd);
+}
+
+/* -------------- CAMERA FUNCTIONS ---------------- */
+
+static void	init_camera(t_fdf *fdf)
+{
+	fdf->camera->zoom = 30;
+	fdf->camera->angle = 0.8;
+	fdf->camera->x_position = 330;
+	fdf->camera->y_position = 120;
+	fdf->camera->gap = 1;
+	fdf->camera->projection = 1;
+}
+
+/* -------------- WINDOW FUNCTIONS ---------------- */
 
 void	init_window(t_fdf *fdf)
 {
 	fdf->mlx = mlx_init();
 	if (!fdf->mlx)
 	{
-		free_all(fdf);
+		destroy_all(fdf);
 		exit(1);
 	}
+	
 	fdf->win = mlx_new_window(fdf->mlx, 800, 600, "FdF");
 	if (!fdf->win)
 	{
-		free_all(fdf);
+		destroy_all(fdf);
 		exit(1);
 	}
 
-	draw_line(fdf, 500, 100, 100, 150); //dps eu só vou chamar a draw aqui e a draw_line vai ta dentro dela
+	init_camera(fdf);
+	draw(fdf);
 
 	mlx_key_hook(fdf->win, key_hook, fdf);
+	mlx_hook(fdf->win, DestroyNotify, NoEventMask, x_hook, fdf);
+	mlx_expose_hook(fdf->win, expose_hook, fdf);
+	// mlx_mouse_hook(fdf->win, mouse_hook, fdf);
 	mlx_loop(fdf->mlx);
-}
-
-void	init_sizes(t_fdf *fdf, char *file)
-{
-	int	fd;
-	char *buffer;
-	char **line;
-	int	i;
-	
-	fd = open(file, 'r');
-	
-	buffer = get_next_line(fd);
-	line = ft_split(buffer, ' ');
-	free (buffer);
-	
-	i = 0;
-	while (line[i])
-		free(line[i++]);
-	free(line);
-	fdf->map->length = i;
-	
-	i = 1;
-	buffer = get_next_line(fd);
-	while (buffer)
-	{
-		free(buffer);
-		buffer = get_next_line(fd);
-		i++;
-	}
-	fdf->map->width = i;
-	
-	close(fd);
-}
-
-static int	*convert_mtx(char **char_mtx, int size)
-{
-	int	*mtx;
-	int	i;
-	
-	if (!(mtx = malloc(sizeof(int) * size)))
-		exit(1);
-	i = -1;
-	while (char_mtx[++i])
-		mtx[i] = ft_atoi(char_mtx[i]);
-	return (mtx);
-}
-
-void	init_matrix(t_fdf *fdf, char *file)
-{
-	int		fd;
-	int		i;
-
-	fd = open(file, 'r');
-	if (!(fdf->map = malloc(sizeof(t_map))))
-		exit(1);
-	init_sizes(fdf, file);
-	if (!(fdf->map->matrix = malloc(sizeof(int *) * fdf->map->width)))
-		exit(1);
-
-	i = 0;
-	fdf->map->buffer = get_next_line(fd);
-	while (fdf->map->buffer)
-	{
-		fdf->map->line = ft_split(fdf->map->buffer, ' ');
-		valid_map_line(fdf);
-		fdf->map->matrix[i++] = convert_mtx(fdf->map->line, fdf->map->length);
-		free_line(fdf);
-		free(fdf->map->buffer);
-		fdf->map->buffer = get_next_line(fd);
-	}
-	close (fd);
 }

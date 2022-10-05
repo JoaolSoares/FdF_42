@@ -6,68 +6,84 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 22:50:55 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 02:51:11 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/10/05 05:00:20 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-int	bigger(int a, int b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
-
-float positive(float i)
-{
-	if (i < 0)
-		return (i * -1);
-	return (i);
-}
-
-void	draw_line(t_fdf *fdf, float x1, float y1, float x2, float y2)
+static void	brasenham(t_fdf *fdf, t_spots *spots, int color)
 {
 	float	x_step;
 	float	y_step;
 	int		max;
-
-	// [1:1] [3:12]
-	x_step = x2 - x1; // 2
-	y_step = y2 - y1; // 11
-
-	max = bigger(positive(x_step), positive(y_step)); // 11
 	
-	x_step /= max; //  2/11     = 0,18181818...
-	y_step /= max; // 11/11     = 1
+	x_step = spots->x2 - spots->x1;
+	y_step = spots->y2 - spots->y1;
+	
+	max = bigger(positive(x_step), positive(y_step));
+	
+	x_step /= max;
+	y_step /= max;
 
-	while ((int)(x1 != x2) || (int)(y1 != y2))
+	while ((int)(spots->x1 - spots->x2) ||
+			(int)(spots->y1 - spots->y2))
 	{
-		mlx_pixel_put(fdf->mlx, fdf->win, x1, y1, 0xffffff);
-		x1 += x_step; // 1,1818...
-		y1 += y_step; // 2
+		mlx_pixel_put(fdf->mlx, fdf->win, spots->x1, spots->y1, color);
+		spots->x1 += x_step;
+		spots->y1 += y_step;
 	}
 }
 
-// int		draw() {}
+static void	draw_line(t_fdf *fdf, t_spots spots)
+{
+	int		color;
 
+	color = fdf->map->color_mtx[(int)spots.y1][(int)spots.x1];
+	spots.z1 = fdf->map->matrix[(int)spots.y1][(int)spots.x1] * fdf->camera->gap;
+	spots.z2 = fdf->map->matrix[(int)spots.y2][(int)spots.x2] * fdf->camera->gap;
 
+	spots.x1 *= fdf->camera->zoom;
+	spots.y1 *= fdf->camera->zoom; 
+	spots.x2 *= fdf->camera->zoom;
+	spots.y2 *= fdf->camera->zoom;
 
+	if (fdf->camera->projection == 1)
+	{		
+		isometric(&spots.x1, &spots.y1, spots.z1, fdf->camera->angle);
+		isometric(&spots.x2, &spots.y2, spots.z2, fdf->camera->angle);
+	}
 
+	spots.x1 += fdf->camera->x_position;
+	spots.y1 += fdf->camera->y_position;
+	spots.x2 += fdf->camera->x_position;
+	spots.y2 += fdf->camera->y_position;
 
+	brasenham(fdf, &spots, color);
+}
 
-
-// struct color;
-// {
-// 	x
-// 	y
-// 	color
-// }
-
-// if (x = color->x && y = color->y)
-// {
-// 	bota_pixel(x, y, color->color);
-// 	color++;
-// }
-// else
-// 	bota_pixel(x, y, branco);
+void	draw(t_fdf *fdf)
+{
+	fdf->spots->y1 = 0;
+	while (fdf->spots->y1 < fdf->map->width)
+	{
+	fdf->spots->x1 = 0;
+		while (fdf->spots->x1 < fdf->map->length)
+		{
+				if (fdf->spots->x1 < fdf->map->length - 1)
+				{
+					fdf->spots->y2 = fdf->spots->y1;
+					fdf->spots->x2 = fdf->spots->x1 + 1;
+					draw_line(fdf, *fdf->spots);
+				}
+				if (fdf->spots->y1 < fdf->map->width - 1)
+				{
+					fdf->spots->x2 = fdf->spots->x1;
+					fdf->spots->y2 = fdf->spots->y1 + 1;
+					draw_line(fdf, *fdf->spots);
+				}
+				fdf->spots->x1++;
+		}
+		fdf->spots->y1++;
+	}
+}

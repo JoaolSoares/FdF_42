@@ -6,7 +6,7 @@
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:17:31 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/22 03:58:45 by jlucas-s         ###   ########.fr       */
+/*   Updated: 2022/10/05 04:23:40 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static char	*ft_get_line(char *content)
 	char	*line;
 	size_t	i;
 
-	 if (!content[0])
-	 	return (NULL);
+	if (!content[0])
+		return (NULL);
 	i = ft_strlen_until(content, '\n');
 	line = (char *)malloc(sizeof(char) * (i + 2));
 	i = 0;

@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   testes.c                                           :+:      :+:    :+:   */
+/*   ft_power.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/26 20:27:42 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/09/28 00:56:59 by jlucas-s         ###   ########.fr       */
+/*   Created: 2022/10/05 04:22:21 by jlucas-s          #+#    #+#             */
+/*   Updated: 2022/10/05 04:22:21 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/fdf.h"
+#include "../include/libft.h"
 
-void print_line(int *mtx, int size)
+long int	ft_power(int nb, int power)
 {
-	int i = 0;
-	while (i < size - 1)
-	{
-		if (mtx[i + 1] > 9)
-			ft_printf("%i ", mtx[i++]);
-		else
-			ft_printf("%i  ", mtx[i++]);
-	}
-	ft_printf("\n");
-}
+	int		result;
 
-void print_mtx(int **mtx, int wid, int len)
-{
-	int i = 0;
-	while (i < wid)
-		print_line(mtx[i++], len);
+	if (power < 0)
+		return (0);
+	else if ((nb == 0 && power == 0) || power == 0)
+		return (1);
+	else if (power == 1)
+		result = nb;
+	else
+		result = nb * ft_power(nb, power - 1);
+	return (result);
 }

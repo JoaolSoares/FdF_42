@@ -6,13 +6,13 @@
 #    By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 23:34:47 by jlucas-s          #+#    #+#              #
-#    Updated: 2022/09/26 20:29:11 by jlucas-s         ###   ########.fr        #
+#    Updated: 2022/10/05 04:52:07 by jlucas-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fdf
 
-FLAGS = -Werror -Wall -Wextra -lmlx -lXext -lX11
+FLAGS = -Werror -Wall -Wextra -lmlx -lXext -lX11 -lm
 
 GREEN				= \033[1;32m
 NOCOLOR				= \033[0m
@@ -21,11 +21,12 @@ LIBFTPATH = ./lib
 LIBFT = ./lib/libft.a
 
 SRCS = src/main.c \
-	   src/validations.c \
 	   src/init.c \
-	   src/destroy.c \
+	   src/init_utils.c \
 	   src/draw.c \
-	   src/testes.c \
+	   src/draw_utils.c \
+	   src/hooks.c \
+	   src/destroy.c \
 
 all: ${NAME}
 

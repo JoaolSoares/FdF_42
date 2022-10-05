@@ -1,38 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlucas-s <jlucas-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 02:57:40 by jlucas-s          #+#    #+#             */
-/*   Updated: 2022/10/05 01:39:33 by jlucas-s         ###   ########.fr       */
+/*   Created: 2022/10/05 04:51:23 by jlucas-s          #+#    #+#             */
+/*   Updated: 2022/10/05 04:53:33 by jlucas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-static void	valid_arg(int argc, char *argv)
+int	bigger(int a, int b)
 {
-	if (argc != 2)
-	{
-		ft_printf("ERROR! Number of arguments incorrect. Map not informed.\n");
-		exit(1);
-	}
-	else if (!ft_strnstr(argv + ft_strlen(argv) - 4, ".fdf", 4))
-	{
-		ft_printf("ERROR! Map not valid. (.fdf)\n");
-		exit(1);
-	}
+	if (a > b)
+		return (a);
+	return (b);
 }
 
-int	main(int argc, char *argv[])
+float	positive(float i)
 {
-	t_fdf	*fdf;
+	if (i < 0)
+		return (i * -1);
+	return (i);
+}
 
-	valid_arg(argc, argv[1]);
-	fdf = init_allocs();
-	init_matrix(fdf, argv[1]);
-	init_window(fdf);
-	return (0);
+void	isometric(float *x, float *y, int z, float angle)
+{
+	*x = (*x - *y) * cos(angle);
+	*y = (*x + *y) * sin(angle) - z;
 }

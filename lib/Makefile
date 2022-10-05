@@ -31,6 +31,8 @@ SRCS =  ./srcs/ft_atoi.c \
 		./srcs/ft_strtrim.c \
 		./srcs/ft_split.c \
 		./srcs/ft_itoa.c \
+		./srcs/ft_hexatoi.c \
+		./srcs/ft_power.c \
 		./srcs/ft_strmapi.c \
 		./srcs/ft_striteri.c \
 		./srcs/ft_putchar_fd.c \
