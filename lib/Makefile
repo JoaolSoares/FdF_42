@@ -41,10 +41,10 @@ SRCS =  ./srcs/ft_atoi.c \
 		./srcs/ft_putnbr_fd.c \
 		./srcs/ft_strlen_until.c \
 		./srcs/get_next_line.c \
-		./srcs/ft_printf_lib/ft_printf.c \
-		./srcs/ft_printf_lib/conversions.c \
-		./srcs/ft_printf_lib/hexptrcase.c \
-		./srcs/ft_printf_lib/utils.c
+		./srcs/printf_lib/ft_printf.c \
+		./srcs/printf_lib/conversions.c \
+		./srcs/printf_lib/hexptrcase.c \
+		./srcs/printf_lib/utils.c
 
 OBJS = ${SRCS:.c=.o}
 
