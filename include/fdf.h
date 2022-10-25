@@ -107,7 +107,7 @@ int		key_hook(int keycode, t_fdf *fdf);
 int		x_hook(t_fdf *fdf);
 int		expose_hook(t_fdf *fdf);
 int		mouse_hook(int button, int x, int y, t_fdf *fdf);
-void	get_hooks(t_fdf *fdf);
+void		get_hooks(t_fdf *fdf);
 
 //	DESTROY FUNCTIONS
 void	destroy_window(t_fdf *fdf);
