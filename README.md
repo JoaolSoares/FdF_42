@@ -11,8 +11,9 @@
 
 # FdF
 The fifth project from 42<br>
-Frac-ol is a 42 school project whose goal is to create a fractal explorer.
-The program will display different fractals and allow the user to zoom and change the color of the fractal.
+FdF is a 42 school project whose goal is to create a isometric projection based on a map.<br>
+The program will display different isometric projections and allow the user to zoom, move, change perspective and 
+relief.
 
 ## How to use
 
